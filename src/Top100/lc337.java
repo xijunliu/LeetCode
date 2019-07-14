@@ -12,41 +12,15 @@ class TreeNode {
  }
 
     public int rob(TreeNode root) {
-        if(root==null) return 0;
-        LinkedList<TreeNode> queue = new LinkedList<>();
-        queue.addFirst(root);
-        int sumAll = 0;
-        int sum = 0;
-        int level = 0;
-        int toBePrint = 1;
-        int flag = 1;
-        TreeNode node = null;
-        while (!queue.isEmpty()){
-            if(toBePrint>0){
-                node = queue.pollLast();
-                if(node != null){
-                    sumAll+=node.val;
-                    if(flag == 1){
-                        sum+=node.val;
-                    }
-                }
-                    toBePrint--;
-                }
-                if(node.left != null) {
-                    queue.addFirst(node.left);
-                    level++;
-                }
-                if (node.right != null){
-                    queue.addFirst(node.right);
-                    level++;
-                }
-            }
-            if(toBePrint==0){
-                toBePrint = level;
-                level = 0;
-                flag = -flag;
-            }
-        return  sum >sumAll? sum : sumAll ;
-        }
+        if(root == null) return 0;
+        //可以通过添加一个hashtable避免每个节点重复计算，当遇到hash表中存在的节点则直接返回hash表中的值
+        int temp = root.val;
+        if(root.left != null) temp += rob(root.left.left) + rob(root.left.right);
+        if(root.right != null) temp += rob(root.right.left) + rob(root.right.right);
+        int temp1 = rob(root.left) + rob(root.right);
+        return Math.max(temp, temp1);
+    }
+
+
 
 }
